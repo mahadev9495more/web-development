@@ -1,0 +1,195 @@
+filename - alarm-clock.html
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Alarm Clock</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Alarm Clock</h1>
+    <div>
+        <label for="alarm-hrs">Hours:</label>
+        <input type="number" id="alarm-hrs" min="0" max="11">
+        <label for="alarm-mins">Minutes:</label>
+        <input type="number" id="alarm-mins" min="0" max="59">
+        <label for="alarm-secs">Seconds:</label>
+        <input type="number" id="alarm-secs" min="0" max="59">
+        <button id="set-alarm">Set Alarm</button>
+    </div>
+    <div id="alarms">
+        <h2>Alarms List</h2>
+        <ul id="alarms-list"></ul>
+    </div>
+    <script>
+        // Get the alarm time input elements and set alarm button
+        const alarmHrs = document.getElementById("alarm-hrs");
+        const alarmMins = document.getElementById("alarm-mins");
+        const alarmSecs = document.getElementById("alarm-secs");
+        const setAlarmBtn = document.getElementById("set-alarm");
+
+        // Get the alarms list element
+        const alarmsList = document.getElementById("alarms-list");
+
+        // Initialize an empty array to store the alarms
+        let alarms = [];
+
+        // Set the alarm when the user clicks the set alarm button
+        setAlarmBtn.addEventListener("click", () => {
+            // Get the alarm time from the input elements
+            const alarmTime = new Date();
+            alarmTime.setHours(alarmHrs.value);
+            alarmTime.setMinutes(alarmMins.value);
+            alarmTime.setSeconds(alarmSecs.value);
+
+            // Add the alarm to the alarms array
+            alarms.push(alarmTime);
+
+            // Update the alarms list element
+            updateAlarmsList();
+        });
+
+        // Update the alarms list element
+        function updateAlarmsList() {
+            // Clear the existing alarms list
+            alarmsList.innerHTML = "";
+
+            // Loop through the alarms array and add each alarm to the list
+            alarms.forEach((alarm, index) => {
+                // Create a new list item for the alarm
+                const listItem = document.createElement("li");
+
+                // Add the alarm time to the list item
+                listItem.textContent = `${alarm.toLocaleTimeString()}`;
+
+                // Create a delete button for the alarm
+                const deleteBtn = document.createElement("button");
+                deleteBtn.textContent = "Delete";
+
+                // Add an event listener to the delete button to remove the alarm
+                deleteBtn.addEventListener("click", () => {
+                    // Remove the alarm from the alarms array
+                    alarms.splice(index, 1);
+
+                    // Update the alarms list element
+                    updateAlarmsList();
+                });
+
+                // Add the delete button to the list item
+                listItem.appendChild(deleteBtn);
+
+                // Add the list item to the alarms list element
+                alarmsList.appendChild(listItem);
+            });
+
+            // Set up a timer to check for alarms every second
+            setInterval(() => {
+                // Loop through the alarms array and check if any alarms are due
+                alarms.forEach((alarm, index) => {
+                    // If the current time matches the alarm time, show an alert
+                    if (new Date().getTime() === alarm.getTime()) {
+                        alert(`Alarm ${index + 1} is going off!`);
+                    }
+                });
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+filename - styles.css
+
+
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f5f5f5;
+}
+
+#clock-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+h1 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.input-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+label {
+  margin-right: 10px;
+}
+
+input[type="number"] {
+  width: 50px;
+  padding: 5px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+#set-alarm-btn {
+  padding: 10px 20px;
+  font-size: 1rem;
+  background-color: #4CAF50;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+#alarms-container {
+  margin-top: 30px;
+}
+
+#alarms-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#alarms-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #f5f5f5;
+  padding: 10px;
+  border-radius: 3px;
+  margin-bottom: 5px;
+}
+
+#alarms-list li button {
+  background-color: #f44336;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+}
